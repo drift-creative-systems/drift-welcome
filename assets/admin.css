@@ -1,0 +1,185 @@
+/*
+ * Drift: Welcome settings screen (Settings → Drift: Welcome). Loaded on that
+ * screen only, see Drift_Welcome_Admin::assets().
+ * Accent: emerald #10b981 for the mark; #047857 for text, focus and fills (AA on white).
+ */
+
+/* Page shell ------------------------------------------------------------- */
+
+.drift-welcome {
+  --drift-welcome-accent: #10b981;
+  --drift-welcome-accent-strong: #047857;
+  --drift-welcome-border: #dcdcde;
+  --drift-welcome-subtle: #ecfdf5;
+  max-width: 1100px;
+}
+
+.drift-welcome__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.drift-welcome__mark {
+  display: inline-flex;
+  color: var(--drift-welcome-accent);
+}
+
+.drift-welcome__title .page-title-action {
+  margin-left: 6px;
+}
+
+.drift-welcome__tabs {
+  margin-bottom: 16px;
+}
+
+.drift-welcome__lead {
+  margin: 16px 0 0;
+  font-size: 14px;
+}
+
+.drift-welcome__card {
+  margin-top: 16px;
+  padding: 4px 20px 16px;
+  background: #fff;
+  border: 1px solid var(--drift-welcome-border);
+  border-radius: 8px;
+}
+
+.drift-welcome__card-title {
+  margin: 16px 0 0;
+}
+
+.drift-welcome__intro {
+  margin: 12px 0 16px;
+  padding-left: 12px;
+  border-left: 3px solid var(--drift-welcome-accent);
+}
+
+/* Image pickers (Drift_Welcome_Admin::media_field()) ----------- */
+
+/* wp-admin's .button-link sets its own display, which beats the UA
+   stylesheet's [hidden] rule, so restate it so Remove/preview actually hide. */
+.drift-welcome-media-field [hidden] {
+  display: none;
+}
+
+.drift-welcome-media-field__preview img {
+  display: block;
+  max-width: 300px;
+  height: auto;
+  padding: 8px;
+  background: #f6f7f7;
+  border: 1px solid #dcdcde;
+  border-radius: 6px;
+}
+
+.drift-welcome-media-field .drift-welcome-media-field__remove {
+  margin-left: 8px;
+  color: #b32d2e;
+}
+
+/* Label + small input pairs on one line (logo width/height). */
+.drift-welcome-inline-fields {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+}
+
+.drift-welcome-inline-fields input + label {
+  margin-left: 10px;
+}
+
+/* Colour fields --------------------------------------------------------- */
+
+.drift-welcome-color-field {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  margin: 0 24px 8px 0;
+  vertical-align: top;
+}
+
+.drift-welcome-color-field label {
+  font-weight: 600;
+}
+
+/* Custom-cards repeater (Quick links tab) ------------------------------- */
+
+.drift-welcome-card-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+  background: #f6f7f7;
+  border: 1px solid #dcdcde;
+  border-radius: 6px;
+}
+
+.drift-welcome-card-row input[type="text"],
+.drift-welcome-card-row input[type="url"] {
+  flex: 1 1 200px;
+}
+
+.drift-welcome-card-row label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.drift-welcome-card-row .drift-welcome-remove-card {
+  color: #b32d2e;
+}
+
+/* Admin menus list (White Label tab, class-drift-welcome-admin-access.php) ------------ */
+
+.drift-welcome-menu-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.drift-welcome-menu-list__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--drift-welcome-border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.drift-welcome-menu-list__item:has(input:checked) {
+  background: var(--drift-welcome-subtle);
+  border-color: var(--drift-welcome-accent-strong);
+}
+
+.drift-welcome-menu-list__item input {
+  margin-top: 2px;
+}
+
+.drift-welcome-menu-list__item small {
+  display: block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+  color: #50575e;
+  word-break: break-all;
+}
+
+@media (max-width: 1100px) {
+  .drift-welcome-menu-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 782px) {
+  .drift-welcome-menu-list {
+    grid-template-columns: 1fr;
+  }
+}

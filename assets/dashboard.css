@@ -1,0 +1,203 @@
+/*
+ * Drift: Welcome dashboard panel. Loaded on the dashboard only.
+ *
+ * The panel renders inside WordPress's normal postbox chrome (title bar, drag
+ * handle). Only the collapse toggle and the Screen Options tab are hidden,
+ * since there's nothing else on the page to reorder or toggle.
+ *
+ * The custom properties are the built-in colours. Settings → Drift: Welcome →
+ * Colours overrides them per site with an inline style
+ * (Drift_Welcome_Dashboard::override_css()).
+ */
+
+.drift-welcome-panel {
+  --drift-welcome-panel-bg: linear-gradient(135deg, #0b0b0f, #064e3b);
+  --drift-welcome-panel-text: #ffffff;
+  --drift-welcome-icon: #047857;
+  --drift-welcome-text: #1d2327;
+  --drift-welcome-hover-bg: #0b0b0f;
+  --drift-welcome-hover-text: #ffffff;
+  --drift-welcome-logo-width: 200px;
+}
+
+body.index-php #screen-options-link-wrap {
+  display: none;
+}
+
+/* Forces the widget's own postbox column to the full dashboard width and
+   hides the other (now-empty, since every other widget is stripped) postbox
+   columns — WordPress's own #postbox-container-N column-width rules key off
+   the "Screen Options" column count (.columns-2/.columns-3 body classes),
+   which this plugin no longer exposes a way to change (Screen Options tab is
+   hidden above), so this can't just be left to that setting. !important
+   guards against wp-admin core's own more specific columns-N selectors on
+   WordPress versions where ID-selector specificity alone might not be enough
+   to win reliably. */
+#dashboard-widgets #postbox-container-1 {
+  width: 100% !important;
+  float: none !important;
+}
+
+#dashboard-widgets #postbox-container-2,
+#dashboard-widgets #postbox-container-3,
+#dashboard-widgets #postbox-container-4 {
+  display: none !important;
+}
+
+#drift_welcome_panel .handlediv {
+  display: none;
+}
+
+#drift_welcome_panel .inside {
+  margin: 0;
+  padding: 0;
+}
+
+.drift-welcome-panel__welcome {
+  padding: 24px 20px;
+  background: var(--drift-welcome-panel-bg);
+  color: var(--drift-welcome-panel-text);
+}
+
+/* Optional logo above the heading (Welcome tab). Width comes
+   from the settings screen via --drift-welcome-logo-width; max-width: 100% stops a
+   wide logo overflowing the panel on narrow admin viewports. */
+.drift-welcome-panel__logo {
+  margin: 0 0 16px;
+}
+
+.drift-welcome-panel__logo-img {
+  display: block;
+  width: var(--drift-welcome-logo-width);
+  max-width: 100%;
+  height: auto;
+}
+
+.drift-welcome-panel__heading {
+  margin: 0 0 4px;
+  color: var(--drift-welcome-panel-text);
+  font-size: 20px;
+}
+
+.drift-welcome-panel__text {
+  color: color-mix(in srgb, var(--drift-welcome-panel-text) 85%, transparent);
+}
+
+/* Welcome text now comes from a WYSIWYG field (wp_editor(), teeny toolbar —
+   see class-drift-welcome-admin.php) and can contain paragraphs/lists/links, not just
+   a single line, so its child elements need their own spacing/colour rather
+   than relying on .drift-welcome-panel__text alone. */
+.drift-welcome-panel__text p {
+  margin: 0 0 8px;
+}
+
+.drift-welcome-panel__text p:last-child {
+  margin-bottom: 0;
+}
+
+.drift-welcome-panel__text ul,
+.drift-welcome-panel__text ol {
+  margin: 0 0 8px 20px;
+}
+
+.drift-welcome-panel__text a {
+  color: var(--drift-welcome-panel-text);
+  text-decoration: underline;
+}
+
+/* Mobile-first column steps so square cards don't get oversized on wide
+   screens: 1 → 2 (above 480px) → 3 (above wp-admin's own 782px breakpoint)
+   → 4 (992px+) → 5 (1200px+) → 6 (1980px+). Explicit column counts rather
+   than auto-fill, so a short last row stays short instead of every card
+   reflowing when a conditional card (Team, Analytics) is absent. */
+.drift-welcome-panel__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  background: #dcdcde;
+  container-type: inline-size;
+}
+
+@media screen and (min-width: 481px) {
+  .drift-welcome-panel__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 783px) {
+  .drift-welcome-panel__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .drift-welcome-panel__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .drift-welcome-panel__grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media screen and (min-width: 1980px) {
+  .drift-welcome-panel__grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+/* Square cards (1:1) rather than a fixed padding-driven height, so a card
+   stays square as the grid's own width changes across admin
+   viewport sizes — the icon size below is clamp()'d off the viewport for the
+   same reason, so it grows/shrinks roughly in step with the card itself
+   rather than looking tiny in a big square or cramped in a small one. */
+.drift-welcome-panel__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  aspect-ratio: 1 / 1;
+  padding: 16px;
+  background: #fff;
+  text-decoration: none;
+  color: var(--drift-welcome-text);
+  text-align: center;
+}
+
+.drift-welcome-panel__card:hover,
+.drift-welcome-panel__card:focus {
+  background: var(--drift-welcome-hover-bg);
+  color: var(--drift-welcome-hover-text);
+}
+
+.drift-welcome-panel__card:hover .dashicons,
+.drift-welcome-panel__card:focus .dashicons,
+.drift-welcome-panel__card:hover .drift-welcome-panel__card-sub,
+.drift-welcome-panel__card:focus .drift-welcome-panel__card-sub {
+  color: var(--drift-welcome-hover-text);
+}
+
+.drift-welcome-panel__card .dashicons {
+  width: clamp(32px, 6cqw, 64px);
+  height: clamp(32px, 6cqw, 64px);
+  font-size: clamp(32px, 6cqw, 64px);
+  color: var(--drift-welcome-icon);
+}
+
+/* cqw (container query width, relative to .drift-welcome-panel__grid) needs
+   container-type set on the grid, see .drift-welcome-panel__grid above. Browsers
+   without container query support (older than ~2023) just keep the clamp()'s
+   fixed min value (32px) throughout, which still looks fine — this is a
+   progressive enhancement, not a hard requirement. */
+
+.drift-welcome-panel__card-label {
+  font-weight: 600;
+}
+
+.drift-welcome-panel__card-sub {
+  font-size: 12px;
+  color: #646970;
+}
